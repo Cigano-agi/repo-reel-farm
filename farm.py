@@ -215,14 +215,14 @@ async def invoke(role: str, episode_dir: Path, provider: dict, upstream: dict, m
     return result
 
 
-async def run(episode_dir: Path, provider: dict, concurrency: int, mock: bool, force: bool) -> dict:
+async def run(episode_dir: Path, provider: dict, concurrency: int, mock: bool, force: bool, shared_semaphore: asyncio.Semaphore | None = None) -> dict:
     episode = read_json(episode_dir / "episode.json")
     validate_episode(episode)
     if not (episode_dir / "BRIEF.md").exists():
         raise ValueError("Falta BRIEF.md")
     cache_dir = episode_dir / ".farm-cache"
     cache_dir.mkdir(exist_ok=True)
-    semaphore = asyncio.Semaphore(concurrency)
+    semaphore = shared_semaphore or asyncio.Semaphore(concurrency)
     tasks: dict[str, asyncio.Task] = {}
     results: dict[str, dict] = {}
     started = time.monotonic()
@@ -286,18 +286,30 @@ async def run(episode_dir: Path, provider: dict, concurrency: int, mock: bool, f
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Farm de subagentes para vídeos Repo Reel")
-    parser.add_argument("episode", help="Pasta do episódio, com episode.json e BRIEF.md")
+    parser.add_argument("episode", nargs="?", help="Pasta do episódio, com episode.json e BRIEF.md")
+    parser.add_argument("--batch-file", help="JSON com episodes[]; caminhos relativos ao arquivo")
     parser.add_argument("--provider", default="codex", help="Nome do provider em providers.json")
     parser.add_argument("--providers-file", default=str(ROOT / "providers.json"))
     parser.add_argument("--concurrency", type=int, default=3)
     parser.add_argument("--mock", action="store_true", help="Testa a DAG sem chamar LLM; resultados não têm valor editorial")
     parser.add_argument("--force", action="store_true", help="Ignora cache da farm")
     args = parser.parse_args()
-    episode_dir = Path(args.episode).resolve()
     if args.concurrency < 1 or args.concurrency > 8:
         parser.error("--concurrency deve ficar entre 1 e 8")
-    if not episode_dir.is_dir():
-        parser.error("Pasta do episódio inexistente")
+    if bool(args.episode) == bool(args.batch_file):
+        parser.error("Informe uma pasta de episódio OU --batch-file")
+    if args.batch_file:
+        batch_file = Path(args.batch_file).resolve()
+        if not batch_file.is_file():
+            parser.error("Arquivo batch inexistente")
+        rows = read_json(batch_file).get("episodes")
+        if not isinstance(rows, list) or not rows or any(not isinstance(row, str) for row in rows):
+            parser.error("Batch precisa de episodes[] com caminhos")
+        episode_dirs = [(batch_file.parent / row).resolve() for row in rows]
+    else:
+        episode_dirs = [Path(args.episode).resolve()]
+    if any(not path.is_dir() for path in episode_dirs):
+        parser.error("Pasta de episódio inexistente")
     if args.mock:
         provider = {}
     else:
@@ -309,9 +321,12 @@ def main() -> int:
             parser.error(f"Provider {args.provider} não encontrado")
         if not shutil.which(provider["command"][0]):
             parser.error(f"CLI indisponível: {provider['command'][0]}")
-    final = asyncio.run(run(episode_dir, provider, args.concurrency, args.mock, args.force))
-    print(json.dumps({"episode": final["episode"], "mock": final["mock"], "elapsedSeconds": final["elapsedSeconds"], "pipelinePassed": final["pipelinePassed"], "publicationReady": final["publicationReady"], "statuses": {k: v["status"] for k, v in final["results"].items()}}, ensure_ascii=False, indent=2))
-    return 0 if all(row["status"] == "pass" for row in final["results"].values()) else 1
+    async def execute() -> list[dict]:
+        shared = asyncio.Semaphore(args.concurrency)
+        return await asyncio.gather(*(run(path, provider, args.concurrency, args.mock, args.force, shared) for path in episode_dirs))
+    finals = asyncio.run(execute())
+    print(json.dumps([{"episode": final["episode"], "mock": final["mock"], "elapsedSeconds": final["elapsedSeconds"], "pipelinePassed": final["pipelinePassed"], "publicationReady": final["publicationReady"], "statuses": {k: v["status"] for k, v in final["results"].items()}} for final in finals], ensure_ascii=False, indent=2))
+    return 0 if all(final["pipelinePassed"] for final in finals) else 1
 
 
 if __name__ == "__main__":

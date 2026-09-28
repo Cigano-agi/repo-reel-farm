@@ -13,6 +13,7 @@ Copy-Item providers.example.json providers.json
 Copy-Item episodes/example episodes/meu-video -Recurse
 python farm.py episodes/meu-video --mock
 python farm.py episodes/meu-video --provider codex
+python farm.py --batch-file episodes/batch.example.json --mock
 ```
 
 O primeiro comando testa apenas a orquestração. Antes da execução real, edite `episodes/meu-video/episode.json` e `BRIEF.md`. Em `providers.json`, você pode trocar o executável e os argumentos por outra LLM que receba prompt e devolva o contrato JSON. Configure sandbox de escrita equivalente ao do Codex para preservar ownership. O processo usa argumentos como lista, sem executar texto de prompt em shell.
@@ -30,7 +31,7 @@ flowchart LR
   F --> H[Red team editorial]
 ```
 
-A farm dispara tarefas independentes em paralelo, limita a concorrência e guarda o resultado por hash do contexto de cada papel. Arquivos de saída são conferidos por hash antes do reuso. Pesquisa e fatos expiram após 24 h; use `--force` se a fonte externa mudou antes disso. Uma falha bloqueia os dependentes. O editor é o único papel que recebe a raiz do episódio como workspace; os demais recebem `work/roles/<papel>`. O adapter da sua LLM deve restringir escrita ao workspace recebido. QA e red team devolvem correções; uma pessoa aprova voz, direitos e publicação. O JSON final separa `pipelinePassed` de `publicationReady`.
+A farm dispara tarefas independentes em paralelo, limita a concorrência global entre episódios e guarda o resultado por hash do contexto de cada papel. Edite `episodes/batch.example.json` para acrescentar as pautas do lote; a equipe de papéis é compartilhada, sem abrir oito agentes exclusivos por vídeo. Arquivos de saída são conferidos por hash antes do reuso. Pesquisa e fatos expiram após 24 h; use `--force` se a fonte externa mudou antes disso. Uma falha bloqueia os dependentes. O editor é o único papel que recebe a raiz do episódio como workspace; os demais recebem `work/roles/<papel>`. O adapter da sua LLM deve restringir escrita ao workspace recebido. QA e red team devolvem correções; uma pessoa aprova voz, direitos e publicação. O JSON final separa `pipelinePassed` de `publicationReady`.
 
 ## Contrato dos agentes
 

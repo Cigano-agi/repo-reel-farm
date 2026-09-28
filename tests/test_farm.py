@@ -72,6 +72,33 @@ class FarmTests(unittest.TestCase):
         deep = farm.role_context("voice_casting", episode, "voz grave", {})
         self.assertNotEqual(farm.digest(light), farm.digest(deep))
 
+    def test_batch_respects_global_concurrency(self):
+        second = self.episode / "second"
+        second.mkdir()
+        (second / "episode.json").write_text((self.episode / "episode.json").read_text(encoding="utf-8"), encoding="utf-8")
+        (second / "BRIEF.md").write_text("Outra pauta", encoding="utf-8")
+        active = 0
+        maximum = 0
+
+        async def worker(role, episode_dir, provider, upstream, mock):
+            nonlocal active, maximum
+            active += 1
+            maximum = max(maximum, active)
+            await asyncio.sleep(0.01)
+            active -= 1
+            return {"status": "pass", "summary": role, "evidence": ["mock://fixture"], "outputs": [], "issues": []}
+
+        async def scenario():
+            shared = asyncio.Semaphore(2)
+            await asyncio.gather(
+                farm.run(self.episode, {}, 2, True, True, shared),
+                farm.run(second, {}, 2, True, True, shared),
+            )
+
+        with patch.object(farm, "invoke", side_effect=worker):
+            asyncio.run(scenario())
+        self.assertEqual(maximum, 2)
+
 
 if __name__ == "__main__":
     unittest.main()
