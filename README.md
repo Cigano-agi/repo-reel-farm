@@ -50,6 +50,7 @@ Cada resposta deve ser JSON com `status` (`pass`/`fail`), `summary`, `evidence[]
 | `episodes/04-qm/` | Piloto QM 04/14 concluído localmente para avaliação privada; código, pesquisa e QA. |
 | `experiments/hypit-qm/` | Prova Hypit editável, renderizada localmente em QM. |
 | `docs/PROCESSO.md` | Processo editorial e QA. |
+| `docs/PLANO-ESCALA-FORMATOS-2026-09-28.md` | Plano de evolução para Twitter Card, carrossel e Repo Reel, com CRUD, biblioteca e benchmark. |
 | `docs/HYPIT.md` | Integração e teste do Hypit. |
 | `docs/QA-REPO-2026-09-28.md` | Verificações e limites da farm. |
 
