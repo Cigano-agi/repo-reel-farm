@@ -1,0 +1,10 @@
+{
+  "name": "repo-radar-04-qm",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "npx --yes hyperframes@0.8.82 check --at 0.5,2.3,4.5,7.5,11.8,14.2,18,21.3,23.5,25.5,28.5,33,37.5 --at-transitions --snapshots",
+    "render": "npx --yes hyperframes@0.8.82 render --batch batch.json --output delivery/{slug}.mp4 --batch-concurrency 1 --workers 1 --no-browser-gpu --crf 18 --strict --json"
+  },
+  "devDependencies": {"@hyperframes/core": "0.8.81"}
+}

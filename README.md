@@ -47,7 +47,7 @@ Cada resposta deve ser JSON com `status` (`pass`/`fail`), `summary`, `evidence[]
 | `CHECKPOINT.md` | Estado e próxima ação com data. |
 | `providers.example.json` | Adapter Codex; copie para `providers.json` ou crie um para sua LLM. |
 | `episodes/example/` | Modelo editável de pauta. |
-| `episodes/04-qm/` | Próximo piloto, em produção local. |
+| `episodes/04-qm/` | Piloto QM 04/14 concluído localmente para avaliação privada; código, pesquisa e QA. |
 | `experiments/hypit-qm/` | Prova Hypit editável, renderizada localmente em QM. |
 | `docs/PROCESSO.md` | Processo editorial e QA. |
 | `docs/HYPIT.md` | Integração e teste do Hypit. |
@@ -55,7 +55,7 @@ Cada resposta deve ser JSON com `status` (`pass`/`fail`), `summary`, `evidence[]
 
 ## Estado
 
-Em 28/09/2026, a Hypit V4 é um render local para avaliação, separado do V3 publicado. A V4 mostra trechos do vídeo real de Reddit, mas ainda requer escuta em celular e confirmação de direito de uso público do trecho. O piloto QM usa a próxima pauta numerada do lote (04/14), sem aprovação de publicação. A prova técnica Hypit de QM foi renderizada: [manifesto e instruções](experiments/hypit-qm/README.md), 8 s, 540×960/30 fps, sem créditos pagos. Ela não é o Reel final.
+Em 28/09/2026, a Hypit V4 é um render local para avaliação, separado do V3 publicado. A V4 mostra trechos do vídeo real de Reddit, mas ainda requer escuta em celular e confirmação de direito de uso público do trecho. O piloto QM 04/14 está renderizado localmente em duas versões de 38 s, com [QA do master](episodes/04-qm/qa/QA.md), para avaliação privada. A prova técnica Hypit de QM foi renderizada: [manifesto e instruções](experiments/hypit-qm/README.md), 8 s, 540×960/30 fps, sem créditos pagos. Ela não é o Reel final.
 
 O código da farm e a documentação geral usam MIT. O experimento `experiments/hypit-qm/` adapta um exemplo oficial do Hypit e segue a [licença própria do Hypit](experiments/hypit-qm/LICENSE-HYPIT.txt); confira suas condições antes de redistribuir ou oferecer como serviço.
 

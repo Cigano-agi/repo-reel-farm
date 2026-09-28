@@ -1,19 +1,17 @@
-# 04/14 — QM, storyboard temporal
+# 04/14 — QM · storyboard de produção
 
-O tempo final será ajustado ao take de voz aprovado. O nome `QM` aparece na primeira menção. O eixo visual é **pessoa / sala / limite de acesso**; não usar mock de conversa real.
+Master vertical 1080 × 1920, 60 fps, 38 s. O nome QM fica no cabeçalho desde 0 s. As capturas de GitHub são reais; os diagramas de workspaces, uso e WhatsApp são ilustrativos.
 
-| Tempo alvo | Narrativa | Imagem e movimento |
+| Tempo | Narração / prova | Cena |
 | --- | --- | --- |
-| 0–3 s | “Seu time tem um agente. Quem ele pode escutar?” | Duas áreas, PESSOA e SALA, se separam como gavetas. `QM` fixo no cabeçalho; headline em até 3 s. Impacto curto. |
-| 3–10 s | Produto oficial e superfícies | Browser capturado em GitHub README e docs. Cursor e zoom apontam “each person and each room”, Slack/web. URL visível. Whoosh na troca. |
-| 10–18 s | Mecanismo | Dois workspaces independentes mostram memória, arquivos, permissões e sandbox; uma faixa de limite impede mistura visual. Entradas sequenciais e legenda em tarja noir. |
-| 18–27 s | Prova humana | Card rotulado “TRANSCRIÇÃO · RELATO DO AUTOR” com Reddit, u/Smooth-One-9514, versão 0.1.4 e resumo do bug observado no atualizador. Nota “sem log anexado”. Não simular print nativo. |
-| 27–32 s | Fonte separada | Browser do `muretai/muretai-qm-skill`; subtítulo “INTEGRAÇÃO PÚBLICA · OUTRO REPOSITÓRIO”. Evitar transição que una identidades. |
-| 32–38 s | Aplicação | Diagrama ilustrativo: sala de produto → docs permitidos → rascunho de PR → revisão humana. Selo “EXEMPLO ILUSTRATIVO”. |
-| 38–fim | Guilda | Card do repo segue para Guilda em WhatsApp ilustrativo; demonstração permanece ao fundo. CTA exato, pop/clique/chime discretos. |
+| 0–3,2 s | “Seu time tem um agente. Quem ele pode escutar?” | Gavetas PESSOA/SALA se separam; headline de mistério, impacto curto. |
+| 3,2–6,6 s | QM separa por pessoa e sala | Browser real do repo oficial, URL, cursor e destaque; whoosh. |
+| 6,6–14 s | Memória, arquivos, permissões, sandbox; Slack/web | Dois espaços lado a lado, limite central; fonte README/docs no rodapé. |
+| 14–22,7 s | Relato do usuário sobre deploy 0.1.4 e bug apontado pelo agente | Trecho literal do comentário em inglês, tradução rotulada, autor, fonte e selo “RELATO DE USO · SEM LOG ANEXADO”. |
+| 22,7–26,72 s | Skill pública conectando QM a outra rede de agentes | Browser real do repo Muretai; “SKILL DE TERCEIRO”, conexão com escopo do agente e aviso de fonte separada. Nome Muretai escrito, sem pronunciá-lo na voz sintética. |
+| 26,72–31,9 s | Sala pode pesquisar docs permitidos e preparar PR para revisão | Fluxo ilustrativo em três passos; revisão humana explícita. |
+| 31,9–38 s | CTA exato da Guilda | Card do QM entra no WhatsApp ilustrativo; pop, clique, chime e CTA em tarja noir. |
 
-## Voz e texto
+Texto falado final: “Seu time tem um agente. Quem ele pode escutar? O quê eme separa o trabalho por pessoa e por sala. Cada espaço tem memória, arquivos, permissões e um sandbox durável. A equipe conversa pelo Slack ou pela web. No Reddit, um usuário conta que instalou a versão zero ponto um ponto quatro e que o agente achou um bug no atualizador dele. É um relato, sem log anexado. Em outra fonte, uma skill pública conecta o quê eme a outra rede de agentes. Na prática, uma sala pode pesquisar documentos permitidos e preparar um PR para revisão. Esse e outros repos estão na nossa Guilda gratuita. Segue pra ter acesso.”
 
-Roteiro base: “Seu time tem um agente. Quem ele pode escutar? O QM separa o trabalho por pessoa e por sala: cada espaço guarda memória, arquivos, permissões e um sandbox durável. A equipe conversa no Slack ou na web. No Reddit, um usuário diz que instalou a versão zero ponto um quatro e viu um agente encontrar um bug no atualizador dele. É autorrelato, sem log anexado. Em outra fonte, uma skill pública conecta QM à rede Muretai. Para aplicar: uma sala pesquisa documentos autorizados e prepara um PR para revisão. Esse e outros repos estão na nossa Guilda gratuita. Segue pra ter acesso.”
-
-Os exemplos de sala e compartilhamento serão diagramas inventados e claramente rotulados. Capturas do browser são reais, sem deformação. Legendas até duas linhas em tarja sólida, acima da área inferior da interface do Instagram.
+A voz candidata é o preset Vlad do Higgsfield/ElevenLabs, com o corpo ajustado a 1,50× e CTA a 1,20×. Duração 36,996 s, pausa interna máxima medida 0,253 s. O catálogo não comprova locale nativo PT-BR para o preset. Sotaque, personalidade e pronúncia dependem de escuta humana em celular antes de publicação. O take Edge TTS `pt-BR-AntonioNeural` segue guardado apenas para comparação.

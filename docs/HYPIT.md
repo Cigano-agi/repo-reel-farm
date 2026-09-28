@@ -7,8 +7,9 @@ Hypit é uma ferramenta separada do HyperFrames. O repositório oficial é [hypi
 ```powershell
 npm.cmd --prefix tools/hypit install
 npm.cmd --prefix tools/hypit run hypit -- --version
-npm.cmd --prefix tools/hypit run hypit -- doctor --json
 ```
+
+Para `doctor`, `plan` e `build`, entre em `experiments/hypit-qm/` e siga seu [README](../experiments/hypit-qm/README.md); o perfil `hypit.runtime.json` pertence àquela pasta.
 
 Node >=22.15, FFmpeg/FFprobe e um Chrome compatível são necessários para as funções de render. Fixe a versão e registre o build ID no episódio. Não coloque tokens no repositório; use variáveis de ambiente e `.env` local ignorado. Um perfil local pode usar `media.local` e `hyperframes.local` sem endpoint HypiHub quando a fonte não o exige. A licença do Hypit é Apache 2.0 modificada, com condições para redistribuição comercial e serviço multiempresa; leia a [licença oficial](https://github.com/hypit-ai/hypit/blob/main/LICENSE) antes de embutir o software em outro produto.
 

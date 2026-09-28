@@ -1,7 +1,7 @@
 ---
 workflow: general-video
 flow: automation
-duration: 44s
+duration: 38s
 format: 1080x1920
 fps: 60
 ---

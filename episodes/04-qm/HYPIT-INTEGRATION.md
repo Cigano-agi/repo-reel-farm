@@ -1,6 +1,6 @@
 # Ponto de integração Hypit
 
-O master deste piloto é produzido em HyperFrames. Uma prova curta de Hypit foi executada separadamente em `../../experiments/hypit-qm/`; ela não substitui o render principal nem gerou o Reel inteiro.
+O Reel principal de **38 s** é produzido em HyperFrames. Uma prova curta de **8 s** foi renderizada separadamente em Hypit, em `../../experiments/hypit-qm/`; ela não substitui o render principal nem gerou o Reel inteiro.
 
 Conforme auditoria de 28/09/2026 em `hypit-v4-integracao.md` (projeto de pesquisa original), o executável é `@hypit/hypit@0.2.16`, requer Node >=22.15, FFmpeg/FFprobe. O fluxo previsto é `hypit check`, `hypit plan`, `hypit runtime up`, `hypit build --follow`, `hypit get <id> --output final.video --to final.mp4`. O `final.svrun` deve apontar para `main.svml` e para `<target output="final.video"/>`.
 
