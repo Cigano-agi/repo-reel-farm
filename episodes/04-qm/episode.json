@@ -1,0 +1,19 @@
+{
+  "slug": "04-qm",
+  "title": "QM — um espaço para cada pessoa e sala",
+  "language": "pt-BR",
+  "sourceRepo": "https://github.com/yc-software/qm",
+  "sourceSite": "https://qm.ycombinator.com/",
+  "sourcePost": "https://www.reddit.com/r/ycombinator/comments/1vc6plb/comment/p1b5k72/",
+  "separateIntegration": "https://github.com/muretai/muretai-qm-skill",
+  "ctaText": "Esse e outros repos estão na nossa Guilda gratuita. Segue pra ter acesso.",
+  "published": false,
+  "claims": [
+    {"claim": "workspaces por pessoa e sala", "proof": "https://github.com/yc-software/qm/blob/main/README.md", "limit": "descrição do fornecedor"},
+    {"claim": "usuário relata deploy e bug encontrado por agente", "proof": "https://www.reddit.com/r/ycombinator/comments/1vc6plb/comment/p1b5k72/", "limit": "autorrelato sem log"},
+    {"claim": "skill conecta QM e Muretai", "proof": "https://github.com/muretai/muretai-qm-skill", "limit": "fonte separada; identidade do autor Reddit não verificada"}
+  ],
+  "rights": {"thirdPartyVideo": "none-used", "pageScreenshots": "private-editorial-review", "voice": "synthetic-pending-human-listen"},
+  "render": {"width": 1080, "height": 1920, "fps": 60, "targetLufs": -15},
+  "hypit": {"status": "local-proof-rendered", "experiment": "../../experiments/hypit-qm", "buildId": "bld_20260928T153840532Z_EFF8C009EF", "runtimeTested": true, "usedInMainReel": false}
+}

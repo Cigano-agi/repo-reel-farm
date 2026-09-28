@@ -1,0 +1,13 @@
+{
+  "slug": "example",
+  "title": "Nome do repositório",
+  "language": "pt-BR",
+  "sourceRepo": "https://github.com/owner/repo",
+  "sourcePost": "",
+  "ctaText": "Esse e outros repos estão na nossa Guilda gratuita. Segue pra ter acesso.",
+  "published": false,
+  "claims": [],
+  "rights": {"thirdPartyVideo": "not-cleared", "voice": "not-selected"},
+  "approval": {"humanAudio": false, "editorial": false},
+  "render": {"width": 1080, "height": 1920, "fps": 60, "targetLufs": -15}
+}

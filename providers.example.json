@@ -1,0 +1,11 @@
+{
+  "codex": {
+    "command": ["codex", "exec", "--sandbox", "workspace-write", "--cd", "{workspace}", "--output-last-message", "{output}", "{prompt}"],
+    "timeoutSeconds": 1800
+  },
+  "claude": {
+    "command": ["claude", "-p", "{prompt}"],
+    "timeoutSeconds": 1800,
+    "stdoutIsResult": true
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "repo-reel-hypit-tooling",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Instalação local e fixada do Hypit para os pilotos Repo Reel",
+  "scripts": {
+    "hypit": "node node_modules/@hypit/hypit/bin/hypit.mjs"
+  },
+  "dependencies": {
+    "@hypit/hypit": "0.2.16"
+  }
+}

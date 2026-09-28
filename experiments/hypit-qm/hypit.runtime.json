@@ -1,0 +1,20 @@
+{
+    "format":  "hypit.runtime-local@1",
+    "dataRoot":  ".hypit/runtimes/local",
+    "credentials":  {
+                        "platform":  {
+                                         "use":  "@hypit/credential-store-platform"
+                                     }
+                    },
+    "endpoints":  {
+                      "media.local":  {
+                                          "use":  "@hypit/provider-media-local"
+                                      },
+                      "hyperframes.local":  {
+                                                "use":  "@hypit/provider-hyperframes-local",
+                                                "config":  {
+                                                               "chromePath":  "C:/Program Files/Google/Chrome/Application/chrome.exe"
+                                                           }
+                                            }
+                  }
+}

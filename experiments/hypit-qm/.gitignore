@@ -1,0 +1,4 @@
+node_modules/
+.hypit/
+output/
+packages/chat-scene/dist/
