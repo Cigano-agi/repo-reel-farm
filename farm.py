@@ -10,6 +10,7 @@ import hashlib
 import json
 from pathlib import Path
 import shutil
+import subprocess
 import sys
 import time
 
@@ -117,16 +118,43 @@ def parse_agent_result(raw: str, role: str) -> dict:
 
 def output_fingerprints(episode_dir: Path, result: dict) -> dict[str, str]:
     fingerprints = {}
+    seen = set()
     for item in result.get("outputs", []):
         path = (episode_dir / item).resolve()
         if not path.is_relative_to(episode_dir.resolve()) or not path.is_file():
             raise ValueError(f"Output ausente ou fora do episódio: {item}")
+        if path in seen:
+            raise ValueError(f"Output repetido por alias: {item}")
+        seen.add(path)
         sha = hashlib.sha256()
         with path.open("rb") as handle:
             for chunk in iter(lambda: handle.read(1024 * 1024), b""):
                 sha.update(chunk)
         fingerprints[item] = sha.hexdigest()
     return fingerprints
+
+
+def probe_mp4(path: Path) -> dict:
+    tool = shutil.which("ffprobe")
+    if not tool:
+        raise ValueError("ffprobe é necessário para validar os MP4")
+    result = subprocess.run(
+        [tool, "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height,r_frame_rate", "-show_entries", "format=duration", "-of", "json", str(path)],
+        capture_output=True, text=True, timeout=30, check=False,
+    )
+    if result.returncode:
+        raise ValueError(f"MP4 inválido: {path.name}: {result.stderr[-300:]}")
+    info = json.loads(result.stdout)
+    streams = info.get("streams", [])
+    if not streams:
+        raise ValueError(f"MP4 sem vídeo: {path.name}")
+    stream = streams[0]
+    numerator, denominator = map(int, stream.get("r_frame_rate", "0/1").split("/"))
+    fps = numerator / denominator if denominator else 0
+    duration = float(info.get("format", {}).get("duration", 0))
+    if (stream.get("width"), stream.get("height")) != (1080, 1920) or fps < 59.9 or duration < 1:
+        raise ValueError(f"MP4 fora da especificação 1080×1920/60 fps: {path.name}")
+    return {"fps": fps, "duration": duration}
 
 
 def validate_outputs(role: str, episode_dir: Path, result: dict, mock: bool) -> dict[str, str]:
@@ -136,6 +164,18 @@ def validate_outputs(role: str, episode_dir: Path, result: dict, mock: bool) -> 
     suffixes = [Path(item).suffix.lower() for item in fingerprints]
     if role == "producer" and not (suffixes.count(".mp4") >= 2 and all(s in suffixes for s in (".png", ".jpg", ".html"))):
         raise ValueError("producer: faltam 2 MP4, capa PNG, contato JPG ou composição HTML")
+    if role == "producer":
+        for item in fingerprints:
+            path = (episode_dir / item).resolve()
+            suffix = path.suffix.lower()
+            if suffix == ".mp4":
+                probe_mp4(path)
+            elif suffix == ".png" and not path.read_bytes().startswith(b"\x89PNG\r\n\x1a\n"):
+                raise ValueError(f"PNG inválido: {path.name}")
+            elif suffix == ".jpg" and not path.read_bytes().startswith(b"\xff\xd8\xff"):
+                raise ValueError(f"JPG inválido: {path.name}")
+            elif suffix == ".html" and b"<html" not in path.read_bytes()[:4096].lower():
+                raise ValueError(f"HTML inválido: {path.name}")
     if role in {"qa_visual", "red_team"} and ".md" not in suffixes:
         raise ValueError(f"{role}: falta parecer Markdown")
     return fingerprints
@@ -230,7 +270,15 @@ async def run(episode_dir: Path, provider: dict, concurrency: int, mock: bool, f
             results[role] = item
     rights = episode.get("rights", {})
     approval = episode.get("approval", {})
-    publication_ready = not mock and all(row["status"] == "pass" for row in results.values()) and rights.get("thirdPartyVideo") == "cleared" and rights.get("voice") == "cleared" and approval.get("humanAudio") is True and approval.get("editorial") is True
+    publication_ready = (
+        not mock
+        and all(row["status"] == "pass" for row in results.values())
+        and rights.get("thirdPartyVideo") in {"cleared", "none-used"}
+        and rights.get("pageScreenshots", "none-used") in {"cleared", "none-used"}
+        and rights.get("voice") == "cleared"
+        and approval.get("humanAudio") is True
+        and approval.get("editorial") is True
+    )
     final = {"episode": episode["slug"], "mock": mock, "elapsedSeconds": round(time.monotonic() - started, 2), "pipelinePassed": all(row["status"] == "pass" for row in results.values()), "publicationReady": publication_ready, "results": results}
     write_json(episode_dir / "work" / "run.json", final)
     return final

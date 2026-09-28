@@ -4,10 +4,10 @@ Processo aberto para criar Reels curtos sobre repositórios com pesquisa rastre�
 
 ## Começar
 
-Requisitos: Python 3.11+, Git, FFmpeg, Node.js e um CLI de LLM (`codex` ou `claude`). Para renderizar, instale HyperFrames no projeto de episódio. Para usar Hypit, siga [docs/HYPIT.md](docs/HYPIT.md).
+Requisitos: Python 3.11+, Git, FFmpeg, Node.js e um CLI de LLM. O exemplo configurado usa Codex; outras LLMs podem usar o mesmo contrato de entrada/saída se seu adapter restringir a escrita por papel. Para renderizar, instale HyperFrames no projeto de episódio. Para usar Hypit, siga [docs/HYPIT.md](docs/HYPIT.md).
 
 ```powershell
-git clone <URL-DESTE-REPOSITÓRIO>
+git clone https://github.com/Cigano-agi/repo-reel-farm.git
 cd repo-reel-farm
 Copy-Item providers.example.json providers.json
 Copy-Item episodes/example episodes/meu-video -Recurse
@@ -15,7 +15,7 @@ python farm.py episodes/meu-video --mock
 python farm.py episodes/meu-video --provider codex
 ```
 
-O primeiro comando testa apenas a orquestração. Antes da execução real, edite `episodes/meu-video/episode.json` e `BRIEF.md`. Em `providers.json`, você pode trocar o executável e os argumentos por qualquer LLM que receba prompt e devolva o contrato JSON. O processo usa argumentos como lista, sem executar texto de prompt em shell.
+O primeiro comando testa apenas a orquestração. Antes da execução real, edite `episodes/meu-video/episode.json` e `BRIEF.md`. Em `providers.json`, você pode trocar o executável e os argumentos por outra LLM que receba prompt e devolva o contrato JSON. Configure sandbox de escrita equivalente ao do Codex para preservar ownership. O processo usa argumentos como lista, sem executar texto de prompt em shell.
 
 ## Fluxo
 
@@ -41,12 +41,13 @@ Cada resposta deve ser JSON com `status` (`pass`/`fail`), `summary`, `evidence[]
 | Caminho | Uso |
 | --- | --- |
 | `farm.py` | Orquestrador e cache por hash. |
-| `providers.example.json` | Adaptadores Codex/Claude; copie para `providers.json`. |
+| `providers.example.json` | Adapter Codex; copie para `providers.json` ou crie um para sua LLM. |
 | `episodes/example/` | Modelo editável de pauta. |
 | `episodes/04-qm/` | Próximo piloto, em produção local. |
 | `experiments/hypit-qm/` | Prova Hypit editável, renderizada localmente em QM. |
 | `docs/PROCESSO.md` | Processo editorial e QA. |
 | `docs/HYPIT.md` | Integração e teste do Hypit. |
+| `docs/QA-REPO-2026-09-28.md` | Verificações e limites da farm. |
 
 ## Estado
 
@@ -54,4 +55,4 @@ Em 28/09/2026, a Hypit V4 é um render local para avaliação, separado do V3 pu
 
 O código da farm e a documentação geral usam MIT. O experimento `experiments/hypit-qm/` adapta um exemplo oficial do Hypit e segue a [licença própria do Hypit](experiments/hypit-qm/LICENSE-HYPIT.txt); confira suas condições antes de redistribuir ou oferecer como serviço.
 
-Este Git local será publicado após o QA do piloto e da integração. Não publique `delivery/`, assets licenciados, tokens ou conversa privada sem checar direitos.
+O Git é público em https://github.com/Cigano-agi/repo-reel-farm. Os MP4s de avaliação ficam no clone local do projeto e não são distribuídos pelo repositório. Não publique `delivery/`, assets licenciados, tokens ou conversa privada sem checar direitos.

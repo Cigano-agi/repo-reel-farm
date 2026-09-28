@@ -50,12 +50,18 @@ class FarmTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "faltam 2 MP4"):
             farm.validate_outputs("producer", self.episode, result, False)
         files = ["delivery/music.mp4", "delivery/clean.mp4", "delivery/cover.png", "delivery/contact.jpg", "index.html"]
+        samples = {".mp4": b"fixture", ".png": b"\x89PNG\r\n\x1a\nfixture", ".jpg": b"\xff\xd8\xfffixture", ".html": b"<html>fixture</html>"}
         for name in files:
             path = self.episode / name
             path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_bytes(b"fixture")
+            path.write_bytes(samples[path.suffix])
         result["outputs"] = files
-        self.assertEqual(len(farm.validate_outputs("producer", self.episode, result, False)), 5)
+        with patch.object(farm, "probe_mp4", return_value={"fps": 60, "duration": 1}):
+            self.assertEqual(len(farm.validate_outputs("producer", self.episode, result, False)), 5)
+        result["outputs"] = ["delivery/music.mp4", "delivery/../delivery/music.mp4", *files[2:]]
+        with self.assertRaisesRegex(ValueError, "Output repetido"):
+            farm.validate_outputs("producer", self.episode, result, False)
+        result["outputs"] = files
         (self.episode / "delivery/clean.mp4").unlink()
         with self.assertRaisesRegex(ValueError, "Output ausente"):
             farm.validate_outputs("producer", self.episode, result, False)
