@@ -55,4 +55,4 @@ Em 28/09/2026, a Hypit V4 é um render local para avaliação, separado do V3 pu
 
 O código da farm e a documentação geral usam MIT. O experimento `experiments/hypit-qm/` adapta um exemplo oficial do Hypit e segue a [licença própria do Hypit](experiments/hypit-qm/LICENSE-HYPIT.txt); confira suas condições antes de redistribuir ou oferecer como serviço.
 
-O Git é público em https://github.com/Cigano-agi/repo-reel-farm. Os MP4s de avaliação ficam no clone local do projeto e não são distribuídos pelo repositório. Não publique `delivery/`, assets licenciados, tokens ou conversa privada sem checar direitos.
+O Git é público em https://github.com/Cigano-agi/repo-reel-farm. O experimento `experiments/hypit-qm/` contém fonte suficiente para gerar sua cena local. O episódio `episodes/04-qm/` guarda pauta, fontes e composição, mas as capturas, vozes e MP4s de avaliação ficam somente no projeto local; quem clonar precisa criar/substituir esses ativos para renderizar o Reel. Não publique `delivery/`, assets licenciados, tokens ou conversa privada sem checar direitos.
