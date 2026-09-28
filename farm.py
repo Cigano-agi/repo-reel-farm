@@ -35,7 +35,7 @@ def digest(data: object) -> str:
 
 
 def read_json(path: Path) -> dict:
-    return json.loads(path.read_text(encoding="utf-8"))
+    return json.loads(path.read_text(encoding="utf-8-sig"))
 
 
 def write_json(path: Path, value: dict) -> None:
@@ -323,9 +323,14 @@ def main() -> int:
             parser.error(f"CLI indisponível: {provider['command'][0]}")
     async def execute() -> list[dict]:
         shared = asyncio.Semaphore(args.concurrency)
-        return await asyncio.gather(*(run(path, provider, args.concurrency, args.mock, args.force, shared) for path in episode_dirs))
+        async def safe_run(path: Path) -> dict:
+            try:
+                return await run(path, provider, args.concurrency, args.mock, args.force, shared)
+            except Exception as exc:
+                return {"episode": path.name, "mock": args.mock, "elapsedSeconds": 0, "pipelinePassed": False, "publicationReady": False, "results": {"setup": {"status": "error", "summary": str(exc)}}}
+        return await asyncio.gather(*(safe_run(path) for path in episode_dirs))
     finals = asyncio.run(execute())
-    print(json.dumps([{"episode": final["episode"], "mock": final["mock"], "elapsedSeconds": final["elapsedSeconds"], "pipelinePassed": final["pipelinePassed"], "publicationReady": final["publicationReady"], "statuses": {k: v["status"] for k, v in final["results"].items()}} for final in finals], ensure_ascii=False, indent=2))
+    print(json.dumps([{"episode": final["episode"], "mock": final["mock"], "elapsedSeconds": final["elapsedSeconds"], "pipelinePassed": final["pipelinePassed"], "publicationReady": final["publicationReady"], "statuses": {k: v["status"] for k, v in final["results"].items()}, "errors": {k: v.get("summary", "") for k, v in final["results"].items() if v["status"] in {"error", "fail"}}} for final in finals], ensure_ascii=False, indent=2))
     return 0 if all(final["pipelinePassed"] for final in finals) else 1
 
 

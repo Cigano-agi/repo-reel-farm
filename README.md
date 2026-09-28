@@ -18,6 +18,8 @@ python farm.py --batch-file episodes/batch.example.json --mock
 
 O primeiro comando testa apenas a orquestração. Antes da execução real, edite `episodes/meu-video/episode.json` e `BRIEF.md`. Em `providers.json`, você pode trocar o executável e os argumentos por outra LLM que receba prompt e devolva o contrato JSON. Configure sandbox de escrita equivalente ao do Codex para preservar ownership. O processo usa argumentos como lista, sem executar texto de prompt em shell.
 
+Para enviar uma edição feita com outra LLM, siga [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Fluxo
 
 ```mermaid
@@ -42,6 +44,7 @@ Cada resposta deve ser JSON com `status` (`pass`/`fail`), `summary`, `evidence[]
 | Caminho | Uso |
 | --- | --- |
 | `farm.py` | Orquestrador e cache por hash. |
+| `CHECKPOINT.md` | Estado e próxima ação com data. |
 | `providers.example.json` | Adapter Codex; copie para `providers.json` ou crie um para sua LLM. |
 | `episodes/example/` | Modelo editável de pauta. |
 | `episodes/04-qm/` | Próximo piloto, em produção local. |
