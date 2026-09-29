@@ -52,6 +52,7 @@ Cada resposta deve ser JSON com `status` (`pass`/`fail`), `summary`, `evidence[]
 | `docs/PROCESSO.md` | Processo editorial e QA. |
 | `docs/PLANO-ESCALA-FORMATOS-2026-09-28.md` | Plano de evolução para Twitter Card, carrossel e Repo Reel, com CRUD, biblioteca e benchmark. |
 | `docs/HYPIT.md` | Integração e teste do Hypit. |
+| `docs/POSTIZ.md` | Protocolo de outro vídeo e estado real da conexão Postiz; rascunho após gates. |
 | `docs/QA-REPO-2026-09-28.md` | Verificações e limites da farm. |
 
 ## Estado
